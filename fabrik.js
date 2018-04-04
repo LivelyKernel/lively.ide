@@ -93,8 +93,8 @@ export async function interactivelyReEvaluateConnection(
 export async function interactivelyEvaluateConnection(opts) {
   let {
     sourceObj, sourceAttr, targetObj, targetAttr, converter, updater,
-    prompt = "confirm connection", highlight = true,
-    onConnect
+    prompt, // = "confirm connection",
+    highlight = true, onConnect
   } = opts;
   let targetModule = "lively://lively.bindings-interactive-connect/x" + sourceObj.id,
       evalEnvironment = {
@@ -105,13 +105,18 @@ export async function interactivelyEvaluateConnection(opts) {
       input = printConnectionElements(sourceObj, sourceAttr, targetObj, targetAttr, converter, updater);
   Object.assign(lively.modules.module(targetModule).recorder,
     {sourceObj, targetObj, connect, once, [sourceAttr]: sourceObj[sourceAttr]
-  })
-  let source = await $world.editPrompt(prompt, {
-    input, historyId: "lively.bindings-interactive-morph-connect", mode: "js",
-    evalEnvironment,
-    animated: false
   });
-  if (!source) { $world.setStatusMessage("connect canceled"); return; }
+  let source;
+  if (prompt) {
+    source = await $world.editPrompt(prompt, {
+      input, historyId: "lively.bindings-interactive-morph-connect", mode: "js",
+      evalEnvironment,
+      animated: false
+    });
+    if (!source) { $world.setStatusMessage("connect canceled"); return; }
+  } else {
+    source = input;
+  }
   let result = await lively.vm.runEval(source, evalEnvironment);
   if (result.isError) {
     $world.logError(result.value);
@@ -124,8 +129,9 @@ export async function interactivelyEvaluateConnection(opts) {
     $world.setStatusMessage("connected!", Color.green);
     interactivelyShowConnection(result.value);
   }
-  if (typeof onConnect === "function")
+  if (typeof onConnect === "function") {
     onConnect(result);
+  }
 }
 
 
