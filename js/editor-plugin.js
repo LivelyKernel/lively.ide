@@ -124,7 +124,7 @@ export default class JavaScriptEditorPlugin extends CodeMirrorEnabledEditorPlugi
   sanatizedJsEnv(envMixin) {
     var env = {...this.evalEnvironment, ...envMixin};
     if (!env.format) env.formatd = "esm";
-    if (!env.context) env.context = this.textMorph;
+    if (env.context === undefined) env.context = this.textMorph;
     if (!env.sourceURL)
       env.sourceURL = env.targetModule + "_doit_" + Date.now();
     // targetModule = targetModule || "lively://lively.next-prototype_2016_08_23/" + morph.id,
