@@ -915,8 +915,10 @@ export class VerticesPopover extends StylePopover {
 
   close() {
     super.close();
-    this.vertexHalo.remove();
-    this.vertexHalo = null;
+    if (this.vertexHalo) {
+      this.vertexHalo.remove();
+      this.vertexHalo = null;
+    }
   }
 
   get keybindings() {
