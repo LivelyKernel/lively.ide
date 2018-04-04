@@ -294,11 +294,11 @@ class ColorPropertyView extends Text {
 
   onKeyDown(evt) {
     if ("Enter" == evt.keyCombo && !this.readOnly) {
-       this.owner.focus();
-       evt.stop();
-       signal(this, 'updateValue', this.value);
+      this.owner.focus();
+      evt.stop();
+      signal(this, 'updateValue', this.value);
     } else {
-       super.onKeyDown(evt);
+      super.onKeyDown(evt);
     }
   }
 }
