@@ -291,7 +291,7 @@ export class RichTextControl extends Morph {
 
 
   reset() {
-    this.get("font button").items = RichTextControl.basicFontItems();
+    this.get("font button").items = config.text.basicFontItems;
     this.get("font button").selection = this.get("font button").items[0].value;
     connect(this.target, "selectionChange", this, "update");
 
