@@ -70,7 +70,13 @@ export default class ClassTreeData extends TreeData {
     if (node.isClass) {
       try {
         return node.children
-          || (node.children = lexicalClassMembers(node.klass).map(ea => {
+          || (node.children = lexicalClassMembers(node.klass).sort((m1, m2) => {
+            if (m1.static !== m2.static) {
+              return m1.static ? -1 : 1; // static members first
+            } else {
+              return m1.name < m2.name ? -1 : 1;
+            }
+          }).map(ea => {
             var {static: _static, name, kind} = ea;
             var prefix = "";
             if (_static) prefix += "static ";

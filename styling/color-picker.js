@@ -290,15 +290,16 @@ class ColorPropertyView extends Text {
     this.get('keyLabel').styleClasses = [!this.readOnly && 'large', 'key'];
     this.styleClasses = [!this.readOnly && 'editable', 'value'];
     this.selection.uninstall();
+    signal(this, 'updateValue', this.value);
   }
 
   onKeyDown(evt) {
     if ("Enter" == evt.keyCombo && !this.readOnly) {
-       this.owner.focus();
-       evt.stop();
-       signal(this, 'updateValue', this.value);
+      this.owner.focus();
+      evt.stop();
+      signal(this, 'updateValue', this.value);
     } else {
-       super.onKeyDown(evt);
+      super.onKeyDown(evt);
     }
   }
 }
@@ -401,7 +402,9 @@ class ColorDetails extends Morph {
 
   onHashViewerChanged(hexString) {
     let color = Color.rgbHex(hexString);
-    this.owner.owner.color = color;
+    if (color !== null) {
+      this.owner.owner.color = color;
+    }
   }
 
    keyValue({name, key, value, update, editable}) {
